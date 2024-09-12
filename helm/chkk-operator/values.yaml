@@ -1,0 +1,63 @@
+# Default values for chkk-operator.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+image:
+  repository: public.ecr.aws/chkk/operator
+  tag: v0.0.11
+  pullPolicy: Always
+
+replicaCount: 1
+revisionHistoryLimit: 2
+
+secret:
+  create: true
+  chkkAccessToken: CHKK-ACCESS-TOKEN
+  # reference to an existing secret (should be in the same namespace as helm release), will be ignored if create is true
+  ref:
+    secretName: chkk-operator
+    keyName: CHKK_ACCESS_TOKEN
+
+serviceAccount:
+  create: true
+  name: chkk-operator-sa
+
+podAnnotations: { chkk.io/name: "chkk-operator" }
+
+disableAnalytics: false
+
+proxy:
+  http_proxy: ""
+  https_proxy: ""
+  no_proxy: ""
+
+## Node tolerations for server scheduling to nodes with taints
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
+##
+tolerations:
+  - key: "kubernetes.io/arch"
+    operator: "Equal"
+    value: "amd64"
+    effect: "NoSchedule"
+  - key: "kubernetes.io/arch"
+    operator: "Equal"
+    value: "arm64"
+    effect: "NoSchedule"
+
+## Node labels for Chkk Operator pod assignment
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
+##
+nodeSelector: {}
+
+## Pod affinity
+##
+affinity:
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/arch
+            operator: In
+            values:
+            - arm64
+            - amd64

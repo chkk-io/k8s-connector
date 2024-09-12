@@ -1,0 +1,97 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "chkk-operator.fullname" . }}
+  labels:
+  {{- include "chkk-operator.labels" . | nindent 4 }}
+    control-plane: {{ include "chkk-operator.fullname" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: {{ .Values.revisionHistoryLimit }}
+  selector:
+    matchLabels:
+      control-plane: {{ include "chkk-operator.fullname" . }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+        annotations:
+        {{- toYaml . | nindent 10 }}
+        {{- end }}
+        labels:
+            {{- include "chkk-operator.selectorLabels" . | nindent 12 }}
+            control-plane: {{ include "chkk-operator.fullname" . }}
+    spec:
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+      - args:
+        - --leader-elect
+        env:
+          - name: DISABLE_ANALYTICS
+            value: "{{ .Values.disableAnalytics }}"
+          {{- if .Values.proxy.http_proxy }}
+          - name: HTTP_PROXY
+            value: {{ .Values.proxy.http_proxy }}
+          {{- end }}
+          {{- if .Values.proxy.https_proxy }}
+          - name: HTTPS_PROXY
+            value: {{ .Values.proxy.https_proxy }}
+          {{- end }}
+          {{- if .Values.proxy.no_proxy }}
+          - name: NO_PROXY
+            value: {{ .Values.proxy.no_proxy }}
+          {{- end }}
+          - name: CHKK_ACCESS_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: {{ if .Values.secret.create }}{{ include "chkk-operator.secretName" . }}{{ else }}{{ .Values.secret.ref.secretName }}{{ end }}
+                key: {{ if .Values.secret.create }}{{ "CHKK_ACCESS_TOKEN" }}{{ else }}{{ .Values.secret.ref.keyName }}{{ end }}
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+        {{- if .Values.nodeSelector }}
+        nodeSelector:
+          {{- toYaml .Values.nodeSelector | nindent 10 }}
+        {{- end }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        name: manager
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        resources:
+          limits:
+            cpu: 100m
+            memory: 256Mi
+          requests:
+            cpu: 100m
+            memory: 256Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          readOnlyRootFilesystem: true
+          runAsUser: 10000
+          runAsGroup: 10000
+          capabilities:
+            drop:
+              - "ALL"
+      securityContext:
+        fsGroup: 65534
+      serviceAccountName: {{ template "chkk-operator.serviceAccountName" . }}
+      terminationGracePeriodSeconds: 10

@@ -1,0 +1,11 @@
+apiVersion: v2
+name: chkk-operator
+description: A Helm chart to deploy the Chkk Operator
+version: 0.0.11
+appVersion: "0.0.11"
+keywords:
+- kubernetes
+home: https://www.chkk.io
+maintainers:
+- name: Chkk
+  email: support@chkk.io
