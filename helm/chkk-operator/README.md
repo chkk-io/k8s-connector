@@ -198,8 +198,10 @@ metadata:
   namespace: chkk-system
 spec:
   agentOverride:
-    image: public.ecr.aws/chkk/chkk-agent:latest
-    managerImage: public.ecr.aws/chkk/chkk-agent-manager:latest
+    image:
+      name: public.ecr.aws/chkk/chkk-agent:v0.1.12
+    managerImage:
+      name: public.ecr.aws/chkk/chkk-agent-manager:v0.1.12
     template:
       securityContext:
         runAsNonRoot: true
