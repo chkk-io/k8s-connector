@@ -15,7 +15,7 @@ This Helm chart is used to deploy the Chkk Operator on a Kubernetes cluster.
 To add the Chkk Helm repository, use the following command:
 
 ```bash
-helm repo add chkk https://charts.chkk.io
+helm repo add chkk https://helm.chkk.io
 helm repo update
 ```
 
