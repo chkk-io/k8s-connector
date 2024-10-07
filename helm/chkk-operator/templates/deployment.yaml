@@ -82,16 +82,13 @@ spec:
           requests:
             cpu: 100m
             memory: 256Mi
+        {{- if .Values.containerSecurityContext }}
         securityContext:
-          allowPrivilegeEscalation: false
-          runAsNonRoot: true
-          readOnlyRootFilesystem: true
-          runAsUser: 10000
-          runAsGroup: 10000
-          capabilities:
-            drop:
-              - "ALL"
+          {{- toYaml .Values.containerSecurityContext | nindent 10 }}
+        {{- end }}
+      {{- if .Values.securityContext }}
       securityContext:
-        fsGroup: 65534
+        {{- toYaml .Values.securityContext | nindent 8 }}
+      {{- end }}
       serviceAccountName: {{ template "chkk-operator.serviceAccountName" . }}
       terminationGracePeriodSeconds: 10
