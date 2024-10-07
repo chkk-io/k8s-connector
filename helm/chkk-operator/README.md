@@ -35,24 +35,26 @@ The command deploys the Chkk Operator on the Kubernetes cluster with the default
 
 The following table lists the configurable parameters of the Chkk Operator chart and their default values.
 
-| Parameter                | Description                    | Default                        |
-| ------------------------ | ------------------------------ | ------------------------------ |
-| `image.repository`       | Image repository               | `public.ecr.aws/chkk/operator` |
-| `image.tag`              | Image tag                      | `v0.0.11`                      |
-| `image.pullPolicy`       | Image pull policy              | `Always`                       |
-| `replicaCount`           | Number of replicas             | `1`                            |
-| `revisionHistoryLimit`   | Revision history limit         | `2`                            |
-| `secret.create`          | Create a new secret            | `true`                         |
-| `secret.chkkAccessToken` | Chkk access token              | `CHKK-ACCESS-TOKEN`            |
-| `serviceAccount.create`  | Create a service account       | `true`                         |
-| `serviceAccount.name`    | Service account name           | `chkk-operator-sa`             |
-| `disableAnalytics`       | Disable analytics              | `false`                        |
-| `proxy.http_proxy`       | HTTP proxy                     | `""`                           |
-| `proxy.https_proxy`      | HTTPS proxy                    | `""`                           |
-| `proxy.no_proxy`         | No proxy                       | `""`                           |
-| `tolerations`            | Node tolerations               | See `values.yaml`              |
-| `nodeSelector`           | Node labels for pod assignment | `{}`                           |
-| `affinity`               | Pod affinity                   | See `values.yaml`              |
+| Parameter                  | Description                        | Default                        |
+| -------------------------- | ---------------------------------- | ------------------------------ |
+| `image.repository`         | Image repository                   | `public.ecr.aws/chkk/operator` |
+| `image.tag`                | Image tag                          | `v0.0.12`                      |
+| `image.pullPolicy`         | Image pull policy                  | `Always`                       |
+| `replicaCount`             | Number of replicas                 | `1`                            |
+| `revisionHistoryLimit`     | Revision history limit             | `2`                            |
+| `secret.create`            | Create a new secret                | `true`                         |
+| `secret.chkkAccessToken`   | Chkk access token                  | `CHKK-ACCESS-TOKEN`            |
+| `serviceAccount.create`    | Create a service account           | `true`                         |
+| `serviceAccount.name`      | Service account name               | `chkk-operator-sa`             |
+| `disableAnalytics`         | Disable analytics                  | `false`                        |
+| `proxy.http_proxy`         | HTTP proxy                         | `""`                           |
+| `proxy.https_proxy`        | HTTPS proxy                        | `""`                           |
+| `proxy.no_proxy`           | No proxy                           | `""`                           |
+| `tolerations`              | Node tolerations                   | See `values.yaml`              |
+| `nodeSelector`             | Node labels for pod assignment     | `{}`                           |
+| `affinity`                 | Pod affinity                       | See `values.yaml`              |
+| `securityContext`          | Security Context for the pod       | See `values.yaml`              |
+| `containerSecurityContext` | Security Context for the container | See `values.yaml`              |
 
 ### Custom Secret
 

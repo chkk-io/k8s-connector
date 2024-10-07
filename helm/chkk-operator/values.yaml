@@ -4,7 +4,7 @@
 
 image:
   repository: public.ecr.aws/chkk/operator
-  tag: v0.0.11
+  tag: v0.0.12
   pullPolicy: Always
 
 replicaCount: 1
@@ -61,3 +61,19 @@ affinity:
             values:
             - arm64
             - amd64
+
+## Security Contexts
+##
+
+## Security Context for the pod
+securityContext:
+  runAsNonRoot: true
+
+## Security Context for the container
+containerSecurityContext:
+  allowPrivilegeEscalation: false
+  runAsNonRoot: true
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop:
+      - "ALL"
