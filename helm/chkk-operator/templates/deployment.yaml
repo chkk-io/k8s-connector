@@ -4,6 +4,8 @@ metadata:
   name: {{ include "chkk-operator.fullname" . }}
   labels:
   {{- include "chkk-operator.labels" . | nindent 4 }}
+  annotations:
+  {{- include "chkk-operator.annotations" . | nindent 4 }}
     control-plane: {{ include "chkk-operator.fullname" . }}
 spec:
   replicas: {{ .Values.replicaCount }}
@@ -56,6 +58,10 @@ spec:
             valueFrom:
               fieldRef:
                 fieldPath: metadata.namespace
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
         {{- if .Values.nodeSelector }}
         nodeSelector:
           {{- toYaml .Values.nodeSelector | nindent 10 }}

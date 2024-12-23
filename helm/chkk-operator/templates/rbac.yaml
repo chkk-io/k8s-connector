@@ -6,6 +6,8 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "chkk-operator.labels" . | nindent 4 }}
+  annotations:
+    {{- include "chkk-operator.annotations" . | nindent 4 }}
 rules:
 - apiGroups:
   - ""
@@ -44,6 +46,8 @@ kind: ClusterRole
 metadata:
   creationTimestamp: null
   name: {{ template "chkk-operator.fullname" . }}-manager-role
+  annotations:
+    {{- include "chkk-operator.annotations" . | nindent 4 }}
   labels:
     {{- include "chkk-operator.labels" . | nindent 4 }}
 rules:
@@ -324,6 +328,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: {{ template "chkk-operator.fullname" . }}-metrics-reader
+  annotations:
+    {{- include "chkk-operator.annotations" . | nindent 4 }}
 rules:
 - nonResourceURLs:
   - /metrics
@@ -334,6 +340,8 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
   name: {{ template "chkk-operator.fullname" . }}-proxy-role
+  annotations:
+    {{- include "chkk-operator.annotations" . | nindent 4 }}
 rules:
 - apiGroups:
   - authentication.k8s.io
@@ -355,6 +363,8 @@ metadata:
   namespace: {{ .Release.Namespace }}
   labels:
     {{- include "chkk-operator.labels" . | nindent 4 }}
+  annotations:
+    {{- include "chkk-operator.annotations" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: Role
@@ -370,6 +380,8 @@ metadata:
   name: {{ template "chkk-operator.fullname" . }}-manager-rolebinding
   labels:
     {{- include "chkk-operator.labels" . | nindent 4 }}
+  annotations:
+    {{- include "chkk-operator.annotations" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
@@ -385,6 +397,8 @@ metadata:
   name: {{ template "chkk-operator.fullname" . }}-proxy-rolebinding
   labels:
     {{- include "chkk-operator.labels" . | nindent 4 }}
+  annotations:
+    {{- include "chkk-operator.annotations" . | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole

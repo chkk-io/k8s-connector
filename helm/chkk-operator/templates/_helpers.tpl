@@ -43,6 +43,13 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{- end }}
 
 {{/*
+Common annotations
+*/}}
+{{- define "chkk-operator.annotations" -}}
+chkk.io/name: {{ .Release.Name }}
+{{- end }}
+
+{{/*
 Create the name of the secret account to use
 */}}
 {{- define "chkk-operator.secretName" -}}
